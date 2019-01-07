@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-login',
@@ -7,13 +8,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  loginform: FormGroup;
+  loginForm: FormGroup;
   submitted = false;
 
-  constructor(private formbuilder: FormBuilder) { }
+  constructor(private formbuilder: FormBuilder, private router: Router) { }
 
   ngOnInit() {
-    this.loginform = this.formbuilder.group({
+    this.loginForm = this.formbuilder.group({
       uname: ["", Validators.required],
       psw: ["", Validators.required],
       remember:[]
@@ -21,10 +22,14 @@ export class LoginComponent implements OnInit {
   }
   onSubmit(){
     this.submitted = true;
-    console.log('test');
-    if(this.loginform.invalid){
-      console.log('test1');
+    if(this.loginForm.invalid){
       return;
+    }
+    else{
+      if(this.loginForm.controls.uname.value == "Avinash" && this.loginForm.controls.psw.value == "123456"){
+        // this.router.navigate(['user-profile']);
+        console.log("Done");
+      }
     }
   }
 }
