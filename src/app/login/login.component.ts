@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router'
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,26 +11,39 @@ import { Router } from '@angular/router'
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted = false;
+  invalidLogin = false;
+  username: string;
+  password: string;
+  users : {
+    username: string,
+    password: string
+  }
 
-  constructor(private formbuilder: FormBuilder, private router: Router) { }
-
-  ngOnInit() {
+  constructor(private formbuilder: FormBuilder, private router: Router, private userservice: UserService) {
     this.loginForm = this.formbuilder.group({
       uname: ["", Validators.required],
       psw: ["", Validators.required],
       remember:[]
     });
-  }
-  onSubmit(){
+   }
+
+  ngOnInit() { }
+
+  onSubmit(post){
     this.submitted = true;
     if(this.loginForm.invalid){
       return;
     }
     else{
-      if(this.loginForm.controls.uname.value == "Avinash" && this.loginForm.controls.psw.value == "123456"){
-        // this.router.navigate(['user-profile']);
-        console.log("Done");
-      }
+      this.username = post.uname;
+      this.password = post.psw;
+      this.userservice.login(this.username, this.password).subscribe(users => {
+        this.users = users;
+        this.router.navigate(["list-users"]);
+      },
+      error=>{
+        this.invalidLogin = true;
+      });
     }
   }
 }

@@ -1,9 +1,12 @@
   <div id="login" class="modal">
-    <form [formGroup]="loginForm" class="modal-content animate" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" class="modal-content animate" (ngSubmit)="onSubmit(loginForm.value)">
       <div class="imgcontainer">
         <img src="../../assets/images/img_avatar2.png" alt="Avatar" class="avatar">
       </div>
       <div class="container">
+          <div *ngIf="invalidLogin" class="error">
+          <div>* Invalid credentials.</div>
+        </div>
         <label for="uname"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" formControlName="uname" >
         <div *ngIf="submitted && loginForm.controls.uname.errors" class="error">
